@@ -12,7 +12,6 @@ export class UsuarioController{
         const { matricula, senha } = req.body;
         const secretKey = process.env.SECRET_KEY;
 
-        console.log("Chave secreta:", secretKey);
         if (!secretKey) {
         return res.status(500).json({ mensagem: "Chave secreta não configurada." });
         }

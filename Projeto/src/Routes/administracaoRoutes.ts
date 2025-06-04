@@ -14,6 +14,26 @@ administracaoRoutes.post('/admin', async (req: Request, res: Response) => {
     await administracaoController.criarAdmin(req, res);
 });
 
+// Ler admin por matrícula
+administracaoRoutes.get('/admin/:matricula', authenticate, authorizeAdmin, async (req: Request, res: Response) => {
+    await administracaoController.lerAdmin(req, res);
+});
+
+// Ler todos os admins
+administracaoRoutes.get('/admin', authenticate, authorizeAdmin, async (req: Request, res: Response) => {
+    await administracaoController.lerTodosAdmin(req, res);
+});
+
+// Atualizar admin por matrícula
+administracaoRoutes.put('/admin/:matricula', authenticate, authorizeAdmin, async (req: Request, res: Response) => {
+    await administracaoController.atualizarAdmin(req, res);
+});
+
+// Apagar admin por matrícula
+administracaoRoutes.delete('/admin/:matricula', authenticate, authorizeAdmin, async (req: Request, res: Response) => {
+    await administracaoController.apagarAdmin(req, res);
+});
+
 // Criar aluno
 administracaoRoutes.post('/alunos', authenticate, authorizeAdmin, async (req: Request, res: Response) => {
     await administracaoController.criarAluno(req, res);

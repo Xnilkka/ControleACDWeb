@@ -63,7 +63,7 @@ export class AdministracaoController {
             novaPessoa.matricula = matricula;
             novaPessoa.nome = nome;
             novaPessoa.sobrenome = sobrenome;
-            novaPessoa.data_nascimento = new Date(data_nascimento);
+            novaPessoa.data_nascimento = data_nascimento;
             novaPessoa.email = email;
             novaPessoa.telefone = telefone;
             novaPessoa.cpf = cpf;
@@ -95,7 +95,85 @@ export class AdministracaoController {
             console.error(error);
             return res.status(500).json({ message: 'Erro ao criar Admin' });
         }
-    } 
+    }
+
+    async lerAdmin(req: Request, res: Response): Promise<Response> {
+        try {
+            const { matricula } = req.params;
+
+            const admin = await this.administracaoService.findByMatricula(matricula);
+
+            if (!admin) {
+                return res.status(404).json({ message: 'Admin não encontrado.' });
+            }
+
+            return res.status(200).json(admin);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao buscar admin.' });
+        }
+    }
+
+    async lerTodosAdmin(req: Request, res: Response): Promise<Response> {
+        try {
+            const admins = await this.administracaoService.findAll();
+
+            if (!admins || admins.length === 0) {
+                return res.status(404).json({ message: 'Nenhum admin cadastrado.' });
+            }
+
+            return res.status(200).json(admins);
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao buscar admins.' });
+        }
+    }
+
+    async atualizarAdmin(req: Request, res: Response): Promise<Response> {
+        try {
+            const { matricula } = req.params;
+            const dadosAtualizados = req.body;
+
+            const adminExistente = await this.administracaoService.findByMatricula(matricula);
+
+            if (!adminExistente) {
+                return res.status(404).json({ message: 'Admin não encontrado.' });
+            }
+
+            const adminAtualizado = await this.administracaoService.update(matricula, dadosAtualizados);
+
+            return res.status(200).json({
+                message: 'Admin atualizado com sucesso.',
+                admin: adminAtualizado
+            });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao atualizar admin.' });
+        }
+    }
+
+    async apagarAdmin(req: Request, res: Response): Promise<Response> {
+        try {
+            const { matricula } = req.params;
+
+            const adminExistente = await this.administracaoService.findByMatricula(matricula);
+
+            if (!adminExistente) {
+                return res.status(404).json({ message: 'Admin não encontrado.' });
+            }
+
+            const sucesso = await this.administracaoService.delete(matricula);
+
+            if (sucesso) {
+                return res.status(200).json({ message: 'Admin apagado com sucesso.' });
+            } else {
+                return res.status(500).json({ message: 'Falha ao apagar o admin.' });
+            }
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: 'Erro ao apagar admin.' });
+        }
+    }
     
     async criarAluno(req: Request, res: Response): Promise<Response> {
         try {
@@ -135,7 +213,7 @@ export class AdministracaoController {
             novaPessoa.matricula = matricula;
             novaPessoa.nome = nome;
             novaPessoa.sobrenome = sobrenome;
-            novaPessoa.data_nascimento = new Date(data_nascimento);
+            novaPessoa.data_nascimento = data_nascimento;
             novaPessoa.email = email;
             novaPessoa.telefone = telefone;
             novaPessoa.cpf = cpf;
@@ -286,7 +364,7 @@ export class AdministracaoController {
             novaPessoa.matricula = matricula;
             novaPessoa.nome = nome;
             novaPessoa.sobrenome = sobrenome;
-            novaPessoa.data_nascimento = new Date(data_nascimento);
+            novaPessoa.data_nascimento = data_nascimento;
             novaPessoa.email = email;
             novaPessoa.telefone = telefone;
             novaPessoa.cpf = cpf;

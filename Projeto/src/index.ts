@@ -8,7 +8,10 @@ import alunoRoutes from './Routes/alunoRoutes';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const cors = require('cors');
+
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/usuario', usuarioRoutes);

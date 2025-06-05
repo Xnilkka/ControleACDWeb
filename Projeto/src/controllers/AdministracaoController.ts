@@ -32,12 +32,6 @@ export class AdministracaoController {
                 telefone,
                 cpf
             } = req.body;
-
-            if(!email.endsWith('@email.com')){
-                return res.status(400).json({
-                    message: 'O email deve terminar com "@email.com".'
-                })
-            }
             
             const now = new Date();
             const ano = now.getFullYear();
@@ -186,11 +180,6 @@ export class AdministracaoController {
                 cpf
             } = req.body;
 
-            if(!email.endsWith('@email.com')){
-                return res.status(400).json({
-                    message: 'O email deve terminar com "@email.com".'
-                })
-            }
             
             const now = new Date();
             const ano = now.getFullYear();
@@ -336,12 +325,6 @@ export class AdministracaoController {
                 telefone,
                 cpf
             } = req.body;
-
-            if(!email.endsWith('@email.com')){
-                return res.status(400).json({
-                    message: 'O email deve terminar com "@email.com".'
-                })
-            }
             
             const now = new Date();
             const ano = now.getFullYear();

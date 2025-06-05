@@ -25,13 +25,16 @@ export class AlunoService {
 
     //Aqui ta sobrescrevendo o atributo do pessoa de Aluno com o atributo pessoa de {} que contem os campos opcionais
     async update(matricula: string, data: Partial<Aluno & { pessoa?: Partial<Pessoa> }>): Promise<Aluno | null> {
-    // Atualiza campos de Pessoa se vierem no objeto
-        if (data.pessoa) {
-            await this.pessoaRepo.update(matricula, data.pessoa);
-        }
 
         const { pessoa, ...alunoData } = data;
-        await this.repo.update(matricula, alunoData);
+
+        if (pessoa && Object.keys(pessoa).length > 0) {
+            await this.pessoaRepo.update(matricula, pessoa);
+        }
+
+        if (alunoData && Object.keys(alunoData).length > 0) {
+            await this.repo.update(matricula, alunoData);
+        }
 
         return await this.findByMatricula(matricula);
 }

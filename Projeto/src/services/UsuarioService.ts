@@ -27,14 +27,18 @@ export class UsuarioService {
 
 
     async update(matricula: string, data: Partial<Usuario & {pessoa?: Partial<Pessoa>}>): Promise<Usuario | null>  {
-        if(data.pessoa){
-            await this.pessoaRepo.update(matricula,data.pessoa);
-        }
 
         // Removi o campo pessoa antes de atualizar o Aluno
         // ...  isso aqui é pra agrupar todas as outras propriedades do objeto data que não são pessoa em um novo objeto chamado usuarioData
         const { pessoa, ...usuarioData } = data;
-        await this.repo.update(matricula, usuarioData);
+
+        if(pessoa && Object.keys(pessoa).length > 0){
+            await this.pessoaRepo.update(matricula, pessoa);
+        }
+
+        if(usuarioData && Object.keys(usuarioData).length > 0){
+            await this.repo.update(matricula,usuarioData);
+        }
 
         return await this.findByMatricula(matricula);
     }

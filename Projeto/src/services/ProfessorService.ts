@@ -99,8 +99,8 @@ export class ProfessorService {
             return null;
         }
 
-        if (data.nota_1 !== undefined) registro.nota_1 = data.nota_1;
-        if (data.nota_2 !== undefined) registro.nota_2 = data.nota_2;
+        if (data.nota_1 !== undefined) registro.nota_1 = Number(data.nota_1);
+        if (data.nota_2 !== undefined) registro.nota_2 = Number(data.nota_2);
 
         // Calcular média, se ambas as notas estiverem presentes
         if (registro.nota_1 != null && registro.nota_2 != null) {

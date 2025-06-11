@@ -16,5 +16,15 @@ professorRoutes.put('/atualizaprofessor', authenticate, authorizeProfessor, asyn
     await professorController.atualizarProfessor(req, res);
 });
 
+professorRoutes.get('/alunos-disciplinas', authenticate, authorizeProfessor, async (req, res) => {
+    await professorController.buscarAlunosPorDisciplina(req, res);
+});
+
+professorRoutes.post('/atribuir-notas', authenticate, authorizeProfessor, async (req, res) => {
+    await professorController.atribuirNotas(req, res);
+});
+
+
+
 
 export default professorRoutes;

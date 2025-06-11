@@ -2,6 +2,7 @@ import { AppDataSource } from "../data-source";
 import { Professor } from "../entity/Professor";
 import { Pessoa } from "../entity/Pessoa";
 import { Usuario } from "../entity/Usuario";
+import { AlunoDisciplina } from "../entity/Aluno_Disciplina";
 
 export class ProfessorService {
     private repo = AppDataSource.getRepository(Professor);
@@ -63,5 +64,49 @@ export class ProfessorService {
         await this.pessoaRepo.delete(matricula);
 
         return true;
+    }
+
+    async findAlunosPorDisciplina(disciplinaId: string): Promise<AlunoDisciplina[]> {
+        const alunoDisciplinaRepo = AppDataSource.getRepository(AlunoDisciplina);
+
+        return await alunoDisciplinaRepo.find({
+            where: { disciplina: { id: disciplinaId } },
+            relations: [
+                "aluno",
+                "aluno.pessoa",
+                "disciplina"
+            ]
+        });
+    }
+
+    async atualizarNotasAluno(data: {
+        alunoMatricula: string,
+        disciplinaId: string,
+        nota_1?: number,
+        nota_2?: number
+    }): Promise<AlunoDisciplina | null> {
+        const alunoDisciplinaRepo = AppDataSource.getRepository(AlunoDisciplina);
+
+        const registro = await alunoDisciplinaRepo.findOne({
+            where: {
+                alunoMatricula: data.alunoMatricula,
+                disciplina: { id: data.disciplinaId }
+            },
+            relations: ["aluno", "disciplina"]
+        });
+
+        if (!registro) {
+            return null;
+        }
+
+        if (data.nota_1 !== undefined) registro.nota_1 = data.nota_1;
+        if (data.nota_2 !== undefined) registro.nota_2 = data.nota_2;
+
+        // Calcular média, se ambas as notas estiverem presentes
+        if (registro.nota_1 != null && registro.nota_2 != null) {
+            registro.media = Number(((registro.nota_1 + registro.nota_2) / 2).toFixed(2));
+        }
+
+        return await alunoDisciplinaRepo.save(registro);
     }
 }
